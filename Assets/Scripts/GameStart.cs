@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStart : MonoBehaviour
 {
@@ -10,6 +11,22 @@ public class GameStart : MonoBehaviour
     void Start()
     {
         BonusSpawn();
+    }
+
+    private void Update()
+    {
+        CommandKeys();
+    }
+
+    private void CommandKeys()
+    {
+        if (Input.GetKey(KeyCode.R))
+            ResetGame();
+    }
+
+    private static void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void BonusSpawn()
