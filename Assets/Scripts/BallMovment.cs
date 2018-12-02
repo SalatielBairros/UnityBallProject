@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using Assets.Scripts.Utils;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -33,10 +33,19 @@ namespace Assets.Scripts
             if (other.gameObject.CompareTag("BonusCube"))
             {
                 var bonusCube = other.gameObject.GetComponent("BonusCube") as BonusCube;
+                Destroy(other.gameObject);
+
                 _bonusCount += (bonusCube != null ? bonusCube.BonusValue : 1);
 
-                CountText.text = _bonusCount.ToString();
-                Destroy(other.gameObject);
+                if (_bonusCount < 0)
+                {
+                    _bonusCount = 0;
+                    GameActions.ResetGame();
+                }
+                else
+                {
+                    CountText.text = _bonusCount.ToString();
+                }
             }
         }
     }

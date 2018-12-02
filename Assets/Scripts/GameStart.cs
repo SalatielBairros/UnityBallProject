@@ -1,16 +1,27 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Utils;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameStart : MonoBehaviour
 {
     public GameObject Bonus;
-    public int Max = 100;
-    public int Spawned;
-    //public int Spawned { get; private set; }
+    public GameObject Trap;
+    public int MaxBonus = 100;
+    public int MaxTrap = 30;
+    public int Spawned { get; private set; }
+    public Vector3 InitialPosition { get; private set; }
+
 
     void Start()
     {
+        InitialPosition = transform.position;
         BonusSpawn();
+        TrapSpawn();
+    }
+
+    private void TrapSpawn()
+    {
+        CubeGenerator(Trap, Random.Range(1, MaxTrap));
     }
 
     private void Update()
@@ -21,23 +32,29 @@ public class GameStart : MonoBehaviour
     private void CommandKeys()
     {
         if (Input.GetKey(KeyCode.R))
-            ResetGame();
+            GameActions.ResetGame();
+        if (Input.GetKey(KeyCode.P))
+            SetInitialPosition();
     }
 
-    private static void ResetGame()
+    private void SetInitialPosition()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        transform.position = InitialPosition;
     }
 
     private void BonusSpawn()
     {
-        Spawned = Random.Range(1, Max);
+        Spawned = Random.Range(1, MaxBonus);
+        CubeGenerator(Bonus, Spawned);
+    }
 
-        for (int i = 0; i < Spawned; i++)
+    private void CubeGenerator(GameObject cube, int n)
+    {
+        for (int i = 0; i < n; i++)
         {
             var randomX = Random.Range(150, 800);
             var randomZ = Random.Range(-150, 330);
-            Instantiate(Bonus, new Vector3(randomX, 0.87f, randomZ), Quaternion.identity);
+            Instantiate(cube, new Vector3(randomX, 0.87f, randomZ), Quaternion.identity);
         }
     }
 }
