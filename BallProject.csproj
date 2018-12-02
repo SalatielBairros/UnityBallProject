@@ -222,6 +222,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BallCameraScript.cs" />
     <Compile Include="Assets\Scripts\BallMovment.cs" />
+    <Compile Include="Assets\Scripts\BonusCube.cs" />
     <Compile Include="Assets\Scripts\Rotator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
