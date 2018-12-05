@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Utils;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -10,6 +11,13 @@ namespace Assets.Scripts
 
         private Rigidbody _ball;
         private int _bonusCount;
+        private double _percentDone;
+
+        private int BonusCubeCount
+        {
+            get { return ((GameStart)GetComponent("GameStart")).Spawned; }
+        }
+
 
         void Start()
         {
@@ -30,23 +38,50 @@ namespace Assets.Scripts
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("BonusCube"))
+            if (!other.gameObject.CompareTag("BonusCube")) return;
+            BonusCube bonusCube = GetBonusCubeComponent(other);
+            Destroy(other.gameObject);
+
+            _bonusCount += (bonusCube != null ? bonusCube.BonusValue : 1);
+            ValidateBonusCount();
+            //ChangeColorByBonusCount();
+        }
+
+        private void ChangeColorByBonusCount()
+        {
+            _percentDone = Math.Round((double)(BonusCubeCount / _bonusCount * 100), 2);
+
+            if (_percentDone >= 100)
             {
-                var bonusCube = other.gameObject.GetComponent("BonusCube") as BonusCube;
-                Destroy(other.gameObject);
-
-                _bonusCount += (bonusCube != null ? bonusCube.BonusValue : 1);
-
-                if (_bonusCount < 0)
-                {
-                    _bonusCount = 0;
-                    GameActions.ResetGame();
-                }
-                else
-                {
-                    CountText.text = _bonusCount.ToString();
-                }
+                SetColor(new Color(255, 251, 107));
             }
+            else if (_percentDone > 80)
+            {
+                SetColor(new Color(131, 60, 255));
+            }
+        }
+
+        private void ValidateBonusCount()
+        {
+            if (_bonusCount < 0)
+            {
+                _bonusCount = 0;
+                GameActions.ResetGame();
+            }
+            else
+            {
+                CountText.text = _bonusCount.ToString();
+            }
+        }
+
+        private static BonusCube GetBonusCubeComponent(Collider other)
+        {
+            return other.gameObject.GetComponent("BonusCube") as BonusCube;
+        }
+
+        private void SetColor(Color color)
+        {
+            ((Light)this.GetComponent("Light")).color = color;
         }
     }
 }
