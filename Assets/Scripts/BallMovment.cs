@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         private Rigidbody _ball;
         private int _bonusCount;
-        private double _percentDone;
+        public double _percentDone;
 
         private int BonusCubeCount
         {
@@ -44,21 +44,21 @@ namespace Assets.Scripts
 
             _bonusCount += (bonusCube != null ? bonusCube.BonusValue : 1);
             ValidateBonusCount();
-            //ChangeColorByBonusCount();
+            ChangeColorByBonusCount();
         }
 
         private void ChangeColorByBonusCount()
         {
             _percentDone = Math.Round((double)(BonusCubeCount / _bonusCount * 100), 2);
 
-            if (_percentDone >= 100)
-            {
-                SetColor(new Color(255, 251, 107));
-            }
-            else if (_percentDone > 80)
-            {
-                SetColor(new Color(131, 60, 255));
-            }
+            //if (_percentDone >= 100)
+            //{
+            //    SetColor(new Color(255, 251, 107));
+            //}
+            //else if (_percentDone > 80)
+            //{
+            //    SetColor(new Color(131, 60, 255));
+            //}
         }
 
         private void ValidateBonusCount()
